@@ -1,0 +1,71 @@
+---
+title: "Final_Project"
+output: html_document
+date: "2023-04-20"
+---
+
+Variables to look at: 
+Heart rate variability, resting heart rate, amount of sleep, energy burned from previous day, skin temp
+sleep efficiency (intercept)
+
+
+Narrowing it down to semi-easily observable characteristics that we think will be influential and people can implement to better their own sleep
+
+```{r}
+data_w = na.omit(read.csv("Sleep_Cycles.csv"))
+
+head(data_w)
+
+summary(data_w)
+
+plot(data_w$Asleep.duration..min.)
+
+data_w_sub = data_w[,c("Resting.heart.rate..bpm.","Heart.rate.variability..ms.","Energy.burned..cal.","Skin.temp..celsius.","Asleep.duration..min.","Sleep.efficiency..")]
+```
+
+```{r}
+sleep_lm = lm(Sleep.efficiency.. ~ ., data=data_w_sub)
+
+summary(sleep_lm)
+
+full_int_data = data_w[,-c(1:3,13,14)]
+
+full_sleep_lm  = lm(Sleep.efficiency.. ~.,data=full_int_data)
+
+summary(full_sleep_lm)
+```
+```{r}
+lm_2 = lm(Sleep.efficiency.. ~ Recovery.score..+Resting.heart.rate..bpm.+Heart.rate.variability..ms.+Sleep.need..min., data=data_w)
+summary(lm_2)
+
+efficiency_pred=predict(lm_2,newdata=data_2)
+mean_squared_Error =mean((data_2$Sleep.efficiency..-efficiency_pred)^2)
+r_squared=cor(data_2$Sleep.efficiency..,efficiency_pred)^2
+
+r_squared
+
+```
+
+
+```{r}
+data_2 = na.omit(read.csv("Sleep_Cycles_2.csv"))
+
+head(data_2)
+
+data_2_sub = data_2[,c("Resting.heart.rate..bpm.","Heart.rate.variability..ms.","Energy.burned..cal.","Skin.temp..celsius.","Asleep.duration..min.","Sleep.efficiency..")]
+
+sleep_lm_2 = lm(Sleep.efficiency.. ~ ., data=data_2_sub)
+
+summary(sleep_lm_2)
+```
+
+
+
+Determining which factors of sleep most influences sleep performance 
+
+Hypothesis: Energy burned from the previous day would be most influential 
+
+
+
+
+
